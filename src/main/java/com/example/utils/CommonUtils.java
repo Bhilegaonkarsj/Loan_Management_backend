@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import com.example.model.LoginDataResponseModel;
 import com.google.gson.Gson;
@@ -15,6 +16,8 @@ import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.http.HttpServletResponse;
 
+
+@Service
 public class CommonUtils {
 
 	

@@ -3,13 +3,13 @@ package com.example.model;
 public class LoginDataRequestModel {
 
 	
-	private Long user_id;
+	private Integer user_id;
 	private String user_name;
 	private String password;
-	public long getUser_id() {
+	public Integer getUser_id() {
 		return user_id;
 	}
-	public void setUser_id(Long user_id) {
+	public void setUser_id(Integer user_id) {
 		this.user_id = user_id;
 	}
 	public String getUser_name() {

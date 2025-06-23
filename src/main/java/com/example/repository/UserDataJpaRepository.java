@@ -10,7 +10,7 @@ public interface UserDataJpaRepository extends  JpaRepository<UserDataEntity, In
 
 	
 	@Query(value="select * from user_data where id=:user_id",nativeQuery=true)
-	UserDataEntity findByUserId(@Param("user_id")long user_id);
+	UserDataEntity findByUserId(@Param("user_id")Integer user_id);
 
 	
 	@Query(value="select * from user_data where user_name=:user_name and mobile_number=:mobileNo",nativeQuery=true)

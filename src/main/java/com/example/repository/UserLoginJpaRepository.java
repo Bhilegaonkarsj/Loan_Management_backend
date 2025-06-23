@@ -12,9 +12,12 @@ public interface UserLoginJpaRepository extends  JpaRepository<UserLoginDetailsE
 
 	
 	
-	@Query(value="select * from user_login where id=:user_id",nativeQuery=true)
+	@Query(value="select * from user_login where user_id=:user_id",nativeQuery=true)
 	UserLoginDetailsEntity findbyUserId(@Param("user_id")long user_id);
 
-//	UserDataEntity findByUserId(long user_id);
+	
+	@Query(value="select * from user_login where user_id=:userId and token=:loginToken",nativeQuery=true)
+	UserLoginDetailsEntity findByUserIdAndToken(@Param("userId")Integer userId, @Param("loginToken")String loginToken);
+
 
 }
