@@ -8,6 +8,9 @@ public class RequestDataModel {
 	private Integer totalAmount;
 	private String loanType;
 	private String reason;
+	private String accountNumber;
+//	private Integer balanceAmount;
+	
 	public Integer getUserId() {
 		return userId;
 	}
@@ -37,6 +40,12 @@ public class RequestDataModel {
 	}
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
 	}
 	
 	

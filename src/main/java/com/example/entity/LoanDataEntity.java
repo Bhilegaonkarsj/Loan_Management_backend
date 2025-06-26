@@ -39,6 +39,16 @@ public class LoanDataEntity implements Serializable {
 	    @Column(name="userId")
 		private Integer       userId ;
 	    
+
+	    @Column(name="account_number",length=100)
+		private String       accountNumber ;
+	    
+	    @Column(name="balance_amount")
+		private Integer       balanceAmount ;
+	    
+	    
+	    
+	    
 	    @Column(name="loanAmount")
 		private Integer       loanAmount ;
 	    
@@ -54,6 +64,45 @@ public class LoanDataEntity implements Serializable {
 		@Temporal(TemporalType.TIMESTAMP)
 	    @Column(name="createdAt")
 		private Date       createdTimestamp ;
+		
+		
+		@Column(name="loan_type",length=100)
+		private String loanType;
+		
+		@Column(name="amount_saved")
+		private Integer amountSaved;
+		
+		@Column(name="reason",length=100)
+		private String reason;
+	
+		
+		
+		   @Column(name="totalAmount")
+			private Integer       totalAmount ;
+
+		public String getLoanType() {
+			return loanType;
+		}
+
+		public void setLoanType(String loanType) {
+			this.loanType = loanType;
+		}
+
+		public Integer getAmountSaved() {
+			return amountSaved;
+		}
+
+		public void setAmountSaved(Integer amountSaved) {
+			this.amountSaved = amountSaved;
+		}
+
+		public String getReason() {
+			return reason;
+		}
+
+		public void setReason(String reason) {
+			this.reason = reason;
+		}
 
 		public Integer getId() {
 			return id;
@@ -109,6 +158,30 @@ public class LoanDataEntity implements Serializable {
 
 		public void setCreatedTimestamp(Date createdTimestamp) {
 			this.createdTimestamp = createdTimestamp;
+		}
+
+		public Integer getTotalAmount() {
+			return totalAmount;
+		}
+
+		public void setTotalAmount(Integer totalAmount) {
+			this.totalAmount = totalAmount;
+		}
+
+		public String getAccountNumber() {
+			return accountNumber;
+		}
+
+		public void setAccountNumber(String accountNumber) {
+			this.accountNumber = accountNumber;
+		}
+
+		public Integer getBalanceAmount() {
+			return balanceAmount;
+		}
+
+		public void setBalanceAmount(Integer balanceAmount) {
+			this.balanceAmount = balanceAmount;
 		}
 		    
 		    

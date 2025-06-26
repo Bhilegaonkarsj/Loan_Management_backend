@@ -18,7 +18,10 @@ public class NewUserModel {
 	
 	private String emailId;
 	
-	
+	private String accountNumber;
+	private Integer bankId;
+	private Integer accountBalance;
+	private Integer userId;
 	
 	
 	
@@ -77,27 +80,35 @@ public class NewUserModel {
 	public void setAnnualSalary(Integer annualSalary) {
 		this.annualSalary = annualSalary;
 	}
-	@Override
-	public int hashCode() {
-		return Objects.hash(age, annualSalary, mobileNo, occupation, password, user_name);
+	
+	
+	
+	
+	
+	
+	public String getAccountNumber() {
+		return accountNumber;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		NewUserModel other = (NewUserModel) obj;
-		return Objects.equals(age, other.age) && Objects.equals(annualSalary, other.annualSalary)
-				&& Objects.equals(mobileNo, other.mobileNo) && Objects.equals(occupation, other.occupation)
-				&& Objects.equals(password, other.password) && Objects.equals(user_name, other.user_name);
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
 	}
-	@Override
-	public String toString() {
-		return "NewUserModel [user_name=" + user_name + ", password=" + password + ", mobileNo=" + mobileNo + ", age="
-				+ age + ", occupation=" + occupation + ", annualSalary=" + annualSalary + "]";
+	public Integer getBankId() {
+		return bankId;
+	}
+	public void setBankId(Integer bankId) {
+		this.bankId = bankId;
+	}
+	public Integer getAccountBalance() {
+		return accountBalance;
+	}
+	public void setAccountBalance(Integer accountBalance) {
+		this.accountBalance = accountBalance;
+	}
+	public Integer getUserId() {
+		return userId;
+	}
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 	
 	

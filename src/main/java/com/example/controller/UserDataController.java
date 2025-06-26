@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.utils.CommonUtils;
 import com.example.utils.Constants;
+import com.example.entity.AccountsDataEntity;
 import com.example.entity.UserDataEntity;
 import com.example.entity.UserLoginDetailsEntity;
 import com.example.model.LoginDataRequestModel;
@@ -22,6 +23,8 @@ import com.example.model.LoginResponseModel;
 import com.example.model.NewUserModel;
 import com.example.model.RequestDataModel;
 import com.example.model.UserDataDetailsModel;
+import com.example.model.UserDetailsModel;
+import com.example.repository.AccountJpaRepository;
 import com.example.repository.UserDataJpaRepository;
 import com.example.repository.UserLoginJpaRepository;
 import com.example.service.ValidateService;
@@ -45,6 +48,9 @@ public class UserDataController {
 	
 	@Autowired
 	UserLoginJpaRepository userLoginJpaRepository;
+	
+	@Autowired
+	AccountJpaRepository accountJpaRepository;
 	
 	@Autowired
 	ValidateService validateService;
@@ -146,10 +152,11 @@ public class UserDataController {
 				userData.setOccupation(requestData.getOccupation());
 				userDataJpaRepository.save(userData);
 				
-				
+				UserDetailsModel model = new UserDetailsModel();
+				model.setUserId(userData.getId());  
 
 				generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
-						Constants.REQUEST_COMPLETED_1,"User Profile Created",null),HttpStatus.OK);
+						"User Profile Created",model,null),HttpStatus.OK);
 					
 					}
 			
@@ -165,6 +172,65 @@ public class UserDataController {
 	}
 	
 	
+	
+	
+	@CrossOrigin
+	@PostMapping("/add/account")
+	public ResponseEntity<GeneralResponse> addAccounts(	HttpServletRequest request,HttpServletResponse response,
+			@RequestBody NewUserModel requestData) throws UnsupportedEncodingException{
+		
+		ResponseEntity<GeneralResponse> generalResponse = null;
+		
+		
+		System.out.println("api hit successful?");
+		if(requestData!=null) {
+			
+			String token=null;
+			UserDataEntity user=userDataJpaRepository.findByUserId(requestData.getUserId());
+			
+			
+			System.out.println("come here:::"+user);
+			
+			if(user!=null) {
+			
+				AccountsDataEntity acc=accountJpaRepository.findByAccountNumberAndUserId(requestData.getAccountNumber(),user.getId());
+				
+				if(acc==null) {
+				AccountsDataEntity accountModel=new AccountsDataEntity();
+				accountModel.setAccountNumber(requestData.getAccountNumber());
+				accountModel.setBankId(requestData.getBankId());
+				accountModel.setCurrency("INR");
+				accountModel.setInitialBalance(requestData.getAccountBalance());
+				accountModel.setUserId(user.getId());
+				int randomId = (int)(Math.random() * 9000) + 1000; // range 1000–9999
+
+				accountModel.setLinkedId(randomId);
+				accountJpaRepository.save(accountModel);
+				
+			
+				generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
+						Constants.REQUEST_COMPLETED_1,"User Accounts Created",null),HttpStatus.OK);
+				}
+					
+			
+			else {
+		
+		generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
+				Constants.REQUEST_COMPLETED_1,"Account Aready has been Created.You want to sign in?",null),HttpStatus.OK);
+			
+			}
+			}
+				else {
+
+					generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
+							Constants.REQUEST_COMPLETED_1,"User Data Not Found",null),HttpStatus.OK);
+							
+				}
+			}
+		
+		
+		return generalResponse;
+	}
 	
 	
 	//User profile details
