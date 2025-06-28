@@ -46,6 +46,9 @@ public class PaymentDataEntity implements Serializable {
 		private Integer       amount ;
 	    
 	    
+	    @Column(name="account_number")
+		private String       accountNumber ;
+	    
 	    
 		@Temporal(TemporalType.TIMESTAMP)
 	    @Column(name="createdAt")
@@ -81,6 +84,22 @@ public class PaymentDataEntity implements Serializable {
 
 		public void setCreatedTimestamp(Date createdTimestamp) {
 			this.createdTimestamp = createdTimestamp;
+		}
+
+		public Integer getAmount() {
+			return amount;
+		}
+
+		public void setAmount(Integer amount) {
+			this.amount = amount;
+		}
+
+		public String getAccountNumber() {
+			return accountNumber;
+		}
+
+		public void setAccountNumber(String accountNumber) {
+			this.accountNumber = accountNumber;
 		}
 
 				    

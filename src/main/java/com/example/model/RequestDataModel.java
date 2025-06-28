@@ -1,15 +1,22 @@
 package com.example.model;
 
+import java.util.List;
+
 public class RequestDataModel {
 
 	
 	private Integer userId;
-	private Integer amount;
+	private Integer loanAmount;
 	private Integer totalAmount;
 	private String loanType;
 	private String reason;
 	private String accountNumber;
+	private List<String> accountIds;
+	private String profileImage;
+	
 //	private Integer balanceAmount;
+	
+	private Integer loanId;
 	
 	public Integer getUserId() {
 		return userId;
@@ -17,12 +24,7 @@ public class RequestDataModel {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public Integer getAmount() {
-		return amount;
-	}
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
+	
 	public Integer getTotalAmount() {
 		return totalAmount;
 	}
@@ -46,6 +48,30 @@ public class RequestDataModel {
 	}
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
+	}
+	public Integer getLoanAmount() {
+		return loanAmount;
+	}
+	public void setLoanAmount(Integer loanAmount) {
+		this.loanAmount = loanAmount;
+	}
+	public Integer getLoanId() {
+		return loanId;
+	}
+	public void setLoanId(Integer loanId) {
+		this.loanId = loanId;
+	}
+	public List<String> getAccountIds() {
+		return accountIds;
+	}
+	public void setAccountIds(List<String> accountIds) {
+		this.accountIds = accountIds;
+	}
+	public String getProfileImage() {
+		return profileImage;
+	}
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
 	}
 	
 	

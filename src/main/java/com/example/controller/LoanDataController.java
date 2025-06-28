@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.LoanDataEntity;
+import com.example.entity.PaymentDataEntity;
 import com.example.entity.UserLoginDetailsEntity;
 import com.example.model.LoanDataResponseModel;
 import com.example.model.LoginDataResponseModel;
 import com.example.model.RequestDataModel;
 import com.example.repository.LoanDataJpaRepository;
+import com.example.repository.PaymentDataJpaRepository;
 import com.example.service.ValidateService;
 import com.example.utils.CommonUtils;
 import com.example.utils.Constants;
@@ -41,6 +43,11 @@ public class LoanDataController {
 	
 	@Autowired
 	LoanDataJpaRepository loanDataJpaRepository;
+	
+	@Autowired
+	PaymentDataJpaRepository paymentDataJpaRepository;
+	
+	
 	@Autowired
 	ValidateService validateService;
 	
@@ -69,29 +76,66 @@ public class LoanDataController {
 				 
 				if(requestData!=null) {
 						
-						LoanDataEntity entity=new LoanDataEntity();
+					LoanDataEntity entity=loanDataJpaRepository.findByLoanTypeAndUserId(requestData.getLoanType(), requestData.getUserId());
+					
+					
+					if(entity!=null) {
+						
+						System.out.println("Entity::::"+entity.getUserId());
+						
+						entity.setAccountNumber(requestData.getAccountNumber());
+						entity.setLoanAmount(requestData.getLoanAmount());
+						entity.setAmountSaved(entity.getAmountSaved() +requestData.getLoanAmount());
+						loanDataJpaRepository.save(entity);
+						
+
+	                       PaymentDataEntity paymentEntity=new PaymentDataEntity();
+	                       paymentEntity.setLoanId(entity.getId());
+	                       paymentEntity.setUserId(entity.getUserId());
+	                       paymentEntity.setAccountNumber(entity.getAccountNumber());
+	                       paymentEntity.setAmount(entity.getLoanAmount());
+	                       paymentEntity.setCreatedTimestamp(new Date());
+	                       paymentDataJpaRepository.save(paymentEntity);
+					}
+					else {
+					 entity=new LoanDataEntity();
+						
 						
 						entity.setUserId(requestData.getUserId());
 						entity.setLoanType(requestData.getLoanType());
-						entity.setLoanAmount(requestData.getAmount());
+						entity.setLoanAmount(requestData.getLoanAmount());
 						entity.setTotalAmount(requestData.getTotalAmount());
-						
+						entity.setAmountSaved(requestData.getLoanAmount());
 						
 						entity.setAccountNumber(requestData.getAccountNumber());
 						entity.setCreatedTimestamp(new Date());
 						entity.setReason(requestData.getReason());
 						
-                       loanDataJpaRepository.save(entity);						
+                       loanDataJpaRepository.save(entity);	
+                       
+                       
+                       
+                       PaymentDataEntity paymentEntity=new PaymentDataEntity();
+                       paymentEntity.setLoanId(entity.getId());
+                       paymentEntity.setUserId(entity.getUserId());
+                       paymentEntity.setAccountNumber(entity.getAccountNumber());
+                       paymentEntity.setAmount(entity.getLoanAmount());
+                       paymentEntity.setCreatedTimestamp(new Date());
+                       paymentDataJpaRepository.save(paymentEntity);
 					}
+				
+					System.out.println("entity saved");
 						generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
 								Constants.REQUEST_COMPLETED_1,"Data Saved",null),HttpStatus.OK);
-							
+				}	
 				
 			 }catch(Exception e) {
 				 
 			 }
 		
 	}else {
+		
+		
 		generalResponse = new ResponseEntity<GeneralResponse>(
 				new GeneralResponse(HttpServletResponse.SC_UNAUTHORIZED,
 						Constants.INVALID_USER, HttpServletResponse.SC_CONFLICT, null),
@@ -121,24 +165,26 @@ public class LoanDataController {
 		
 			 try {
 				 List<LoanDataResponseModel>modelList=new ArrayList<>();
-				List<LoanDataEntity> loansdata=loanDataJpaRepository.findByLoanTypeAndUserId(requestData.getLoanType(),requestData.getUserId());
+				LoanDataEntity l=loanDataJpaRepository.findByLoanTypeAndUserId(requestData.getLoanType(),requestData.getUserId());
 				 
-				if(loansdata!=null) {
-					for(LoanDataEntity l:loansdata) {
+				if(l!=null) {
+//					for(LoanDataEntity l:loansdata) {
 						
 						LoanDataResponseModel model=new LoanDataResponseModel();
 						
 						model.setLoanId(l.getId());
 						model.setUserId(l.getUserId());
 						model.setLoanType(l.getLoanType());
+						model.setTotalAmountForLoan(l.getTotalAmount());
 						model.setLoanAmount(l.getLoanAmount());
 						model.setPaidAmount(l.getAmountSaved());
+						model.setRemianingAmount(l.getTotalAmount()-l.getAmountSaved());
 						model.setCreatedTimestamp(l.getCreatedTimestamp().toString());
 						model.setReason(l.getReason());
 						
 						modelList.add(model);
 						
-					}
+//					}
 						generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
 								Constants.REQUEST_COMPLETED_1,modelList,null),HttpStatus.OK);
 							

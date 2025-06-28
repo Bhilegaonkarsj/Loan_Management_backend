@@ -49,7 +49,7 @@ public class LoanDataEntity implements Serializable {
 	    
 	    
 	    
-	    @Column(name="loanAmount")
+	    @Column(name="loan_amount")
 		private Integer       loanAmount ;
 	    
 	    @Column(name="intrestRate")

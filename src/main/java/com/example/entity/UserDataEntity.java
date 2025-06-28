@@ -1,6 +1,7 @@
 package com.example.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 
@@ -10,9 +11,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 //import javax.persistence.Entity;
 //import javax.persistence.Id;
@@ -84,10 +88,14 @@ public class UserDataEntity implements Serializable {
 	private String     occupation ;
 
 
+	@Lob
+	@Column(name = "profile_image", columnDefinition = "LONGTEXT")
+	private String     profileImage ;
 	
 	
-	
-
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="modified_timetsamp")
+	private Date     modifiedTimestamp ;
 
 	public Integer getAge() {
 		return age;
@@ -189,6 +197,26 @@ public class UserDataEntity implements Serializable {
 
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
+	}
+
+
+	public String getProfileImage() {
+		return profileImage;
+	}
+
+
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
+
+
+	public Date getModifiedTimestamp() {
+		return modifiedTimestamp;
+	}
+
+
+	public void setModifiedTimestamp(Date modifiedTimestamp) {
+		this.modifiedTimestamp = modifiedTimestamp;
 	}
 	
 	

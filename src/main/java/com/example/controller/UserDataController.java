@@ -2,6 +2,9 @@ package com.example.controller;
 
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,11 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.utils.CommonUtils;
 import com.example.utils.Constants;
 import com.example.entity.AccountsDataEntity;
+import com.example.entity.LoanDataEntity;
 import com.example.entity.UserDataEntity;
 import com.example.entity.UserLoginDetailsEntity;
+import com.example.model.AccountsModel;
+import com.example.model.LoanDataResponseModel;
 import com.example.model.LoginDataRequestModel;
 import com.example.model.LoginResponseModel;
 import com.example.model.NewUserModel;
+import com.example.model.PaymentDataModel;
 import com.example.model.RequestDataModel;
 import com.example.model.UserDataDetailsModel;
 import com.example.model.UserDetailsModel;
@@ -273,6 +280,7 @@ public class UserDataController {
 					userData.setAge(userDetails.getAge());
 					userData.setAnnualSalary(userDetails.getAnnualSalary());
 					userData.setOccupation(userDetails.getOccupation());
+					userData.setUserImage(userDetails.getProfileImage());
 					
 					
 
@@ -301,6 +309,144 @@ public class UserDataController {
 		
 		return generalResponse;
 	}
+	
+	
+	
+	
+	
+	@CrossOrigin
+	@PostMapping("/accounts")
+	public ResponseEntity<GeneralResponse> userAccounts(@RequestHeader(value = "userId", required = true) Integer userId,
+			@RequestHeader(value = "token", required = true) String token, HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestBody RequestDataModel requestData)  {
+		
+		
+		ResponseEntity<GeneralResponse> generalResponse = null;
+		
+		UserLoginDetailsEntity userlogin = validateService.loginValidate(userId, token);
+
+		if (userlogin != null) {
+
+			 generalResponse = commonUtils.jwtCheckProduct(token);	
+		
+			 try {
+				
+					
+					List<AccountsDataEntity> accounts = accountJpaRepository.findByUserId(requestData.getUserId());
+					if(!accounts.isEmpty()){
+						List<String>accountsList=new ArrayList<>();
+						AccountsModel model=new AccountsModel();
+						model.setUserId(requestData.getUserId());
+
+						for(AccountsDataEntity acc:accounts) {
+							
+							accountsList.add(acc.getAccountNumber());
+						}
+						model.setAccountsList(accountsList);
+
+					
+						generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
+								Constants.REQUEST_COMPLETED_1,model,null),HttpStatus.OK);
+							
+				
+				}else {
+					generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
+							Constants.REQUEST_COMPLETED_1,"No account found",null),HttpStatus.OK);
+				}
+			 }catch(Exception e) {
+				 
+			 }
+		
+		
+		
+		
+	}else {
+		generalResponse = new ResponseEntity<GeneralResponse>(
+				new GeneralResponse(HttpServletResponse.SC_UNAUTHORIZED,
+						Constants.INVALID_USER, HttpServletResponse.SC_CONFLICT, null),
+				HttpStatus.OK);
+	}
+		return generalResponse;
+
+	}
+	
+	
+	
+	
+	@CrossOrigin
+	@PostMapping("/save/image")
+	public ResponseEntity<GeneralResponse> saveProfile(@RequestHeader(value = "userId", required = true) Integer userId,
+			@RequestHeader(value = "token", required = true) String token, HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestBody RequestDataModel requestData)  {
+		
+		
+		ResponseEntity<GeneralResponse> generalResponse = null;
+		
+		UserLoginDetailsEntity userlogin = validateService.loginValidate(userId, token);
+
+		if (userlogin != null) {
+
+			 generalResponse = commonUtils.jwtCheckProduct(token);	
+		
+			 try {
+				 
+				if(requestData!=null) {
+				
+					
+					UserDataEntity  user=userDataJpaRepository.findByUserId(requestData.getUserId());
+
+					if(user!=null){
+						
+						user.setProfileImage(requestData.getProfileImage());
+						user.setModifiedTimestamp(new Date());
+						userDataJpaRepository.save(user);
+						
+						
+					}else {
+						
+						user=new UserDataEntity();
+						user.setProfileImage(requestData.getProfileImage());
+						user.setModifiedTimestamp(new Date());
+						userDataJpaRepository.save(user);
+						
+					}
+
+						
+						
+						
+						generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
+								Constants.REQUEST_COMPLETED_1,"Image Saved",null),HttpStatus.OK);
+					}
+					else {
+						generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
+								Constants.REQUEST_COMPLETED_1,"Invalid Image",null),HttpStatus.OK);
+					}
+						
+					
+				
+			 }catch(Exception e) {
+				 
+			 }
+		
+	}else {
+		
+		
+		generalResponse = new ResponseEntity<GeneralResponse>(
+				new GeneralResponse(HttpServletResponse.SC_UNAUTHORIZED,
+						Constants.INVALID_USER, HttpServletResponse.SC_CONFLICT, null),
+				HttpStatus.OK);
+	}
+		return generalResponse;
+
+	}
+
+	
+	
+	
+	
+	
 //	
 ////	
 ////	

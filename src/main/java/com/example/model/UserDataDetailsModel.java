@@ -14,6 +14,7 @@ public class UserDataDetailsModel {
 	private Integer age;
 	private String occupation;
 	private Integer annualSalary;
+	private String userImage;
 	
 	private String emailId;
 
@@ -95,6 +96,17 @@ public class UserDataDetailsModel {
 
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
+	}
+	
+	
+	
+
+	public String getUserImage() {
+		return userImage;
+	}
+
+	public void setUserImage(String userImage) {
+		this.userImage = userImage;
 	}
 
 	@Override

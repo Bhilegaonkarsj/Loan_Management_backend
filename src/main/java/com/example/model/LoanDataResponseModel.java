@@ -10,6 +10,7 @@ public class LoanDataResponseModel {
 	private Integer loanAmount;
 	private Integer paidAmount;
 	private Integer remianingAmount;
+	private Integer totalAmountForLoan;
 	private String createdTimestamp;
 	private String updatedTimestamp;
 	public Integer getLoanId() {
@@ -65,6 +66,12 @@ public class LoanDataResponseModel {
 	}
 	public void setUpdatedTimestamp(String updatedTimestamp) {
 		this.updatedTimestamp = updatedTimestamp;
+	}
+	public Integer getTotalAmountForLoan() {
+		return totalAmountForLoan;
+	}
+	public void setTotalAmountForLoan(Integer totalAmountForLoan) {
+		this.totalAmountForLoan = totalAmountForLoan;
 	}
 	
 	

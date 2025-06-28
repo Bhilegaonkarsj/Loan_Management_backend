@@ -14,7 +14,11 @@ public interface LoanDataJpaRepository extends  JpaRepository<LoanDataEntity, In
 
 	
 	@Query(value="Select * from loan_data where loan_type=:loanType and user_Id=:userId order by created_At desc",nativeQuery=true)
-	List<LoanDataEntity> findByLoanTypeAndUserId(String loanType, Integer userId);
+      LoanDataEntity findByLoanTypeAndUserId(String loanType, Integer userId);
+
+	
+	@Query(value="Select loan_type from loan_data where id=:loanId and user_Id=:userId order by created_At desc",nativeQuery=true)
+	String findByLoanIdAndUserId(@Param("loanId")Integer loanId, @Param("userId")Integer userId);
 
 	
 //	@Query(value="select * from user_data where user_id=:user_id",nativeQuery=true)
