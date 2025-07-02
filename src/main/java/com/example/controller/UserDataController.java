@@ -446,6 +446,81 @@ public class UserDataController {
 	
 	
 	
+	@CrossOrigin
+	@PostMapping("/edit/profile")
+	public ResponseEntity<GeneralResponse> editProfile(@RequestHeader(value = "userId", required = true) Integer userId,
+			@RequestHeader(value = "token", required = true) String token, HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestBody NewUserModel requestData)  {
+		
+		
+		ResponseEntity<GeneralResponse> generalResponse = null;
+		
+		UserLoginDetailsEntity userlogin = validateService.loginValidate(userId, token);
+
+		if (userlogin != null) {
+
+			 generalResponse = commonUtils.jwtCheckProduct(token);	
+		
+			 try {
+				 
+				if(requestData!=null) {
+				
+					
+					UserDataEntity  user=userDataJpaRepository.findByUserId(requestData.getUserId());
+
+					if(user!=null){
+						
+						if(requestData.getFirstName()!=null ) {
+							user.setFirstName(requestData.getFirstName())	;
+						}
+						if(requestData.getLastName()!=null) {
+							user.setLastName(requestData.getLastName())	;
+
+						}
+						if(requestData.getAnnualSalary()!=null) {
+							user.setAnnualSalary(requestData.getAnnualSalary());
+						}
+						if(requestData.getUser_name()!=null) {
+							user.setUserName(requestData.getUser_name());
+						}
+						if(requestData.getEmailId()!=null) {
+							user.setEmailId(requestData.getEmailId());
+						}
+						user.setModifiedTimestamp(new Date());
+						userDataJpaRepository.save(user);
+						
+						
+					}
+						
+						
+						generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
+								Constants.REQUEST_COMPLETED_1,"Profile updated",null),HttpStatus.OK);
+					}
+					else {
+						generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_OK, 
+								Constants.REQUEST_COMPLETED_1,"Invalid Data",null),HttpStatus.OK);
+					}
+						
+					
+				
+			 }catch(Exception e) {
+				 
+			 }
+		
+	}else {
+		
+		
+		generalResponse = new ResponseEntity<GeneralResponse>(
+				new GeneralResponse(HttpServletResponse.SC_UNAUTHORIZED,
+						Constants.INVALID_USER, HttpServletResponse.SC_CONFLICT, null),
+				HttpStatus.OK);
+	}
+		return generalResponse;
+
+	}
+
+	
 	
 //	
 ////	
