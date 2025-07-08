@@ -487,6 +487,9 @@ public class UserDataController {
 						if(requestData.getEmailId()!=null) {
 							user.setEmailId(requestData.getEmailId());
 						}
+						if(requestData.getMobileNo()!=null) {
+							user.setMobileNumber(requestData.getMobileNo());
+						}
 						user.setModifiedTimestamp(new Date());
 						userDataJpaRepository.save(user);
 						
