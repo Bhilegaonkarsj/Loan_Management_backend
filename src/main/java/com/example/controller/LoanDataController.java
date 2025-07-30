@@ -151,7 +151,7 @@ public class LoanDataController {
 	}
 
 
-	logger.info("------------------------------------End of applying loan----------------------------");
+	logger.info("------------------------------------End of applying Loan----------------------------");
 		return generalResponse;
 
 	}
