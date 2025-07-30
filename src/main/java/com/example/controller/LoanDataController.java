@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +56,11 @@ public class LoanDataController {
 	@Autowired
 	CommonUtils commonUtils;
 	
-	
+	Logger logger=LoggerFactory.getLogger("Success");
+	Logger loggerfailure=LoggerFactory.getLogger("Failure");
+
+
+
 	@CrossOrigin
 	@PostMapping("/apply")
 	public ResponseEntity<GeneralResponse> loanApply(	@RequestHeader(value = "userId", required = true) Integer userId,
@@ -69,6 +75,8 @@ public class LoanDataController {
 
 		if (userlogin != null) {
 
+
+			logger.info("------------------------Start Applying to loan---------------------------------");
 			 generalResponse = commonUtils.jwtCheckProduct(token);	
 		
 			 try {
@@ -141,6 +149,9 @@ public class LoanDataController {
 						Constants.INVALID_USER, HttpServletResponse.SC_CONFLICT, null),
 				HttpStatus.OK);
 	}
+
+
+	logger.info("------------------------------------End of applying loan----------------------------");
 		return generalResponse;
 
 	}
