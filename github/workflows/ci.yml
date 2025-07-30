@@ -1,22 +1,38 @@
-name: Java CI with Maven
+name: CI/CD Java Project
 
 on:
   push:
-    branches: [ main1 ]
-  pull_request:
-    branches: [ main1 ]
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-    - name: Build with Maven
-      run: mvn clean install
+      - name: Build Project
+        run: mvn clean install
+
+      - name: Run Tests
+        run: mvn test
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./target  # or your web/static folder
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
