@@ -9,6 +9,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +38,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequestMapping("api/payments")
 public class PaymentDataController {
 
+	private static final Logger logger = LoggerFactory.getLogger(PaymentDataController.class);
 	
 	@Autowired
 	CommonUtils commonUtils;
@@ -95,7 +98,9 @@ public class PaymentDataController {
 				}	
 				
 			 }catch(Exception e) {
-				 
+				 logger.error("Error while fetching payment summary", e);
+				 generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+							Constants.INTERNAL_SERVER_ERROR,null,null),HttpStatus.INTERNAL_SERVER_ERROR);
 			 }
 		
 	}else {
@@ -134,7 +139,7 @@ public class PaymentDataController {
 				if(requestData!=null) {
 						Map<String,List<PaymentDataModel>> payMap=new HashMap<>();
 					List<PaymentDataEntity> paymentList=null;
-					if(!requestData.getAccountIds().isEmpty()) {
+					if(requestData.getAccountIds() != null && !requestData.getAccountIds().isEmpty()) {
 						
 					 paymentList=paymentDataJpaRepository.findByUserIdAndAccountNumbers(requestData.getUserId(),requestData.getAccountIds());
 
@@ -181,7 +186,9 @@ public class PaymentDataController {
 				}	
 				
 			 }catch(Exception e) {
-				 
+				 logger.error("Error while fetching transactions summary", e);
+				 generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+							Constants.INTERNAL_SERVER_ERROR,null,null),HttpStatus.INTERNAL_SERVER_ERROR);
 			 }
 		
 	}else {
