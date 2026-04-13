@@ -1,21 +1,33 @@
 package com.example.model;
 
-import java.util.Objects;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class NewUserModel {
 
 
 
 	
+	@NotBlank(message = "user_name is required")
 	private String user_name;
+	@NotBlank(message = "firstName is required")
 	private String firstName;
+	@NotBlank(message = "lastName is required")
 	private String lastName;
 	private String password;
+	@NotBlank(message = "mobileNo is required")
 	private String mobileNo;
+	@NotNull(message = "age is required")
+	@Min(value = 18, message = "age must be at least 18")
 	private Integer age;
 	private String occupation;
+	@NotNull(message = "annualSalary is required")
+	@Min(value = 0, message = "annualSalary must be zero or more")
 	private Integer annualSalary;
 	
+	@Email(message = "emailId should be valid")
 	private String emailId;
 	
 	private String accountNumber;

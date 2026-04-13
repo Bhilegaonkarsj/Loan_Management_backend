@@ -138,7 +138,11 @@ public class LoanDataController {
 				}	
 				
 			 }catch(Exception e) {
-				 
+				 loggerfailure.error("Error while applying loan", e);
+				 generalResponse = new ResponseEntity<GeneralResponse>(
+							new GeneralResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+									Constants.INTERNAL_SERVER_ERROR, null, null),
+							HttpStatus.INTERNAL_SERVER_ERROR);
 			 }
 		
 	}else {
@@ -205,7 +209,11 @@ public class LoanDataController {
 							Constants.REQUEST_COMPLETED_1,"User Does Not have any loan",null),HttpStatus.OK);
 				}
 			 }catch(Exception e) {
-				 
+				 loggerfailure.error("Error while checking loan", e);
+				 generalResponse = new ResponseEntity<GeneralResponse>(
+							new GeneralResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+									Constants.INTERNAL_SERVER_ERROR, null, null),
+							HttpStatus.INTERNAL_SERVER_ERROR);
 			 }
 		
 		
