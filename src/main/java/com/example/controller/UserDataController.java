@@ -9,6 +9,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +41,7 @@ import com.example.utils.GeneralResponse;
 import com.example.utils.JwtUtil;
 import com.google.gson.Gson;
 
+import jakarta.validation.Valid;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -47,6 +50,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequestMapping("api/user") 
 public class UserDataController {
 
+	private static final Logger logger = LoggerFactory.getLogger(UserDataController.class);
 	
 	
 	@Autowired
@@ -69,7 +73,7 @@ public class UserDataController {
 	@CrossOrigin
 	@PostMapping("/login")
 	public ResponseEntity<GeneralResponse> login(	HttpServletRequest request,HttpServletResponse response,
-			@RequestBody LoginDataRequestModel requestData) throws UnsupportedEncodingException{
+			@Valid @RequestBody LoginDataRequestModel requestData) throws UnsupportedEncodingException{
 		
 		ResponseEntity<GeneralResponse> generalResponse = null;
 		
@@ -132,7 +136,7 @@ public class UserDataController {
 	@CrossOrigin
 	@PostMapping("/signup")
 	public ResponseEntity<GeneralResponse> createAProfile(	HttpServletRequest request,HttpServletResponse response,
-			@RequestBody NewUserModel requestData) throws UnsupportedEncodingException{
+			@Valid @RequestBody NewUserModel requestData) throws UnsupportedEncodingException{
 		
 		ResponseEntity<GeneralResponse> generalResponse = null;
 		
@@ -355,7 +359,9 @@ public class UserDataController {
 							Constants.REQUEST_COMPLETED_1,"No account found",null),HttpStatus.OK);
 				}
 			 }catch(Exception e) {
-				 
+				 logger.error("Error while fetching user accounts", e);
+				 generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+							Constants.INTERNAL_SERVER_ERROR,null,null),HttpStatus.INTERNAL_SERVER_ERROR);
 			 }
 		
 		
@@ -427,7 +433,9 @@ public class UserDataController {
 					
 				
 			 }catch(Exception e) {
-				 
+				 logger.error("Error while saving profile image", e);
+				 generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+							Constants.INTERNAL_SERVER_ERROR,null,null),HttpStatus.INTERNAL_SERVER_ERROR);
 			 }
 		
 	}else {
@@ -508,7 +516,9 @@ public class UserDataController {
 					
 				
 			 }catch(Exception e) {
-				 
+				 logger.error("Error while editing user profile", e);
+				 generalResponse=new ResponseEntity<GeneralResponse>(new GeneralResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+							Constants.INTERNAL_SERVER_ERROR,null,null),HttpStatus.INTERNAL_SERVER_ERROR);
 			 }
 		
 	}else {
